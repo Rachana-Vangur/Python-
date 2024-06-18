@@ -1,9 +1,8 @@
 matrix = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
 
-game_on = True
-
 
 def symbol_choice():
+
     choice = input("Enter the symbol you like (X or O)").upper()
     if choice == "X":
         print("You have choosen X \nand the other player is O\n")
@@ -13,6 +12,7 @@ def symbol_choice():
         return "O"
     else:
         print("Invalid symbol")
+        print("Exiting Game")
         exit()
 
 
@@ -71,37 +71,48 @@ def board_complete():
     return False
 
 
-while game_on:
+# MAIN
+def tic_tac_toe():
+    print("###########################################################")
+    text = "TIC-TAC-TOE".center(50)
+    print(text)
+    print("############################################################")
+    print("\n")
+    game_on = True
+    while game_on:
 
-    for i in range(0, len(matrix)):
-        for j in range(0, len(matrix[i])):
-            print(matrix[i][j], end=" ")
-        print("\n")
-    player_sym = symbol_choice()
-
-    not_end = True
-    while not_end:
-        position = int(input("Enter the position you want to insert: \n"))
-        check_position(position, player_sym)
-        check_match(player_sym)
-
-        # player_sym = flip_player(player_sym)
-
+        player_sym = symbol_choice()
+        print("The board is now empty\n")
         for i in range(0, len(matrix)):
             for j in range(0, len(matrix[i])):
                 print(matrix[i][j], end=" ")
             print("\n")
-        if check_match(player_sym) == True:
-            print(f"Player {player_sym} won the match")
-            not_end = False
 
-        player_sym = flip_player(player_sym)
-        if board_complete():
-            print("It is a TIE")
-            break
-    go_on = input("Do you want to play another game? (Y / N)").upper()
-    if go_on == "N":
-        game_on = False
+        not_end = True
+        while not_end:
+            position = int(input("Enter the position you want to insert:"))
+            check_position(position, player_sym)
+            check_match(player_sym)
+
+            # player_sym = flip_player(player_sym)
+
+            for i in range(0, len(matrix)):
+                for j in range(0, len(matrix[i])):
+                    print(matrix[i][j], end=" ")
+                print("\n")
+            if check_match(player_sym) == True:
+                print(f"Player {player_sym} won the match")
+                not_end = False
+
+            player_sym = flip_player(player_sym)
+            if board_complete():
+                print("It is a TIE")
+                break
+        go_on = input("Do you want to play another game? (Y / N)").upper()
+        if go_on == "N":
+            game_on = False
+
+    print("Exiting the game")
 
 
-print("Exiting the game")
+tic_tac_toe()
