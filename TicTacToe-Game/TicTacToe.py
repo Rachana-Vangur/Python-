@@ -6,10 +6,10 @@ game_on = True
 def symbol_choice():
     choice = input("Enter the symbol you like (X or O)").upper()
     if choice == "X":
-        print("You have choosen X and the other player is O")
+        print("You have choosen X \nand the other player is O\n")
         return "X"
     elif choice == "O":
-        print("You have choosen O and the other player is X")
+        print("You have choosen O \nand the other player is X\n")
         return "O"
     else:
         print("Invalid symbol")
@@ -36,7 +36,6 @@ def check_position(position, player_sym):
 
 
 def check_match(player_sym):
-    print("halo")
     for i in range(0, 3):
         if all(cell == player_sym for cell in matrix[i]):
             return True
@@ -61,6 +60,17 @@ def flip_player(player_sym):
     return player_sym
 
 
+def board_complete():
+    count = 0
+    for i in range(0, 3):
+        for j in range(0, 3):
+            if matrix[i][j] == "X" or matrix[i][j] == "O":
+                count += 1
+    if count == 9:
+        return True
+    return False
+
+
 while game_on:
 
     for i in range(0, len(matrix)):
@@ -71,7 +81,7 @@ while game_on:
 
     not_end = True
     while not_end:
-        position = int(input("Enter the position you want to insert: "))
+        position = int(input("Enter the position you want to insert: \n"))
         check_position(position, player_sym)
         check_match(player_sym)
 
@@ -86,6 +96,9 @@ while game_on:
             not_end = False
 
         player_sym = flip_player(player_sym)
+        if board_complete():
+            print("It is a TIE")
+            break
     go_on = input("Do you want to play another game? (Y / N)").upper()
     if go_on == "N":
         game_on = False
