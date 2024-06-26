@@ -1,0 +1,43 @@
+
+import os
+import tempfile
+from shutil import which
+
+# constants
+FZF_URL = "https://github.com/junegunn/fzf"
+
+
+class FzfPrompt:
+    def __init__(self, executable_path=None):
+        if executable_path:
+            self.executable_path = executable_path
+        elif not which("fzf") and not executable_path:
+            raise SystemError(f"Cannot find 'fzf' installed on PATH. ({FZF_URL})")
+        else:
+            self.executable_path = "fzf"
+
+    def prompt(self, choices=None, fzf_options="", delimiter="\n"):
+        # convert a list to a string [ 1, 2, 3 ] => "1\n2\n3"
+        choices_str = delimiter.join(map(str, choices))
+        selection = []
+
+        with tempfile.NamedTemporaryFile(delete=False) as input_file:
+            with tempfile.NamedTemporaryFile(delete=False) as output_file:
+                # Create a temp file with list entries as lines
+                input_file.write(choices_str.encode("utf-8"))
+                input_file.flush()
+
+        # Invoke fzf externally and write to output file
+        os.system(
+            f'{self.executable_path} {fzf_options} < "{input_file.name}" > "{output_file.name}"'
+        )
+
+        # get selected options
+        with open(output_file.name, encoding="utf-8") as f:
+            for line in f:
+                selection.append(line.strip("\n"))
+
+        os.unlink(input_file.name)
+        os.unlink(output_file.name)
+
+        return selection
