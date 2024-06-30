@@ -5,20 +5,21 @@ smtp_obj = smtplib.SMTP("smtp.gmail.com", 587)
 smtp_obj.ehlo()
 smtp_obj.starttls()
 
-email = input("from/your email: ")
+from_email = input("from/your email: ")
 password = input("your password: ")
 
-smtp_obj.login(email, password)
+smtp_obj.login(from_email, password)
 
 to_email = input("to email: ")
 subject = input("Subject: \n")
 message = input("Message: \n")
 
 print("This will be your mail:\n")
-msg = "Subject: " + subject + "\nMessage: " + message + "\n"
+
+msg = f"From: {from_email}\nTo: {to_email}\nSubject: {subject}\n\n{message}"
 print(msg)
 
 
-smtp_obj.sendmail(email, to_email, msg)
+smtp_obj.sendmail(from_email, to_email, msg)
 print("Message is sent")
 smtp_obj.quit()
